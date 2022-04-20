@@ -1,0 +1,20 @@
+pipeline {
+
+
+    agent any
+    stages{
+
+         stage('data synchronisation') {
+			steps {
+                 sh('''
+                 export https_proxy="${https_proxy}"
+                 chmod 755 ./main_synchro_aws_dev.sh
+                 ./main_synchro_aws_dev.sh ${run_env} ${scope}
+                 ''')
+			}
+        }
+
+    }
+
+
+}

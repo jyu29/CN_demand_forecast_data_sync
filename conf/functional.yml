@@ -1,0 +1,318 @@
+scope:
+  scope_stocks:
+    datalake:
+      cds:
+        - f_range_choice
+      cds_supply:
+        - physical_stock_snapshot
+        - d_model_data_selection
+        - d_comm_season
+        - d_selection
+    filter_time: 2
+  scope_sunday_pipeline_1_transactions:
+    datalake:
+      cds:
+        - f_transaction_detail
+    filter_time: 2
+  scope_sunday_pipeline_2_others:
+    datalake:
+      cds:
+        - f_delivery_detail
+      cds_supply:
+        - d_listing_assortment
+        - d_general_data_warehouse_h
+        - d_general_data_customer
+        - apo_sku_mrp_status_h
+        - d_po_so_link
+        - d_link_purchorg_system
+      ods_supply:
+        - ecc_zaa_extplan
+    filter_time: 2
+  scope_sunday_pipeline_full_1_transactions:
+    datalake:
+      cds:
+        - f_transaction_detail
+  scope_sunday_pipeline_full_2_delivery:
+    datalake:
+      cds:
+        - f_delivery_detail
+  scope_sunday_pipeline_full_3_small_data:
+    datalake:
+      cds:
+        - d_week
+        - d_day
+        - d_sku
+        - d_sku_h
+        - d_business_unit
+        - f_currency_exchange
+      cds_supply:
+        - sites_attribut_0plant_branches_h
+        - d_sales_data_material_h
+        - d_listing_assortment
+        - d_general_data_warehouse_h
+        - d_general_data_customer
+        - apo_sku_mrp_status_h
+        - d_po_so_link
+        - d_link_purchorg_system
+      ods_supply:
+        - ecc_zaa_extplan
+  scope_one_shot:
+    datalake:
+      cds_supply:
+        - d_general_data_customer
+  scope_fnr_pipeline_delta:
+    datalake:
+      cds:
+        - f_transaction_detail
+        - f_delivery_detail
+        - f_stock_picture
+      cds_supply:
+        - d_general_data_store
+    filter_time: 2
+  scope_fnr_pipeline_full:
+    datalake:
+      cds:
+        - d_week
+        - d_day
+        - d_sku
+        - d_business_unit
+        - f_transaction_detail
+        - f_delivery_detail
+        - f_stock_picture
+      cds_supply:
+        - f_analytics_forecast_figures
+        - d_general_data_store
+  scope_fnr_delta:
+    datalake:
+      cds:
+        - f_stock_picture
+      cds_supply:
+        - f_analytics_forecast_figures
+        - d_general_data_store
+    filter_time: 2
+  scope_fnr_full:
+    datalake:
+      cds:
+        - f_stock_picture
+      cds_supply:
+        - f_analytics_forecast_figures
+        - d_general_data_store
+  scope_full:
+    datalake:
+      ods:
+        - mst_d_tiers
+        - dsy_weather
+      cds:
+        - d_week
+        - d_day
+        - d_country
+        - d_department
+        - d_sku
+        - d_sku_h
+        - d_business_unit
+        - d_label_translation
+        - f_currency_exchange
+        - f_transaction_detail
+        - f_delivery_detail
+        - f_stock_picture
+      cds_supply:
+        - sites_attribut_0plant_branches_h
+        - d_sales_data_material_h
+        - d_general_data_warehouse_h
+        - f_analytics_forecast_figures
+        - d_general_data_store
+  scope_delta:
+    datalake:
+      ods:
+        - mst_d_tiers
+        - dsy_weather
+      cds:
+        - d_week
+        - d_day
+        - d_country
+        - d_department
+        - d_sku
+        - d_sku_h
+        - d_business_unit
+        - d_label_translation
+        - f_currency_exchange
+        - f_transaction_detail
+        - f_delivery_detail
+        - f_stock_picture
+      cds_supply:
+        - sites_attribut_0plant_branches_h
+        - d_sales_data_material_h
+        - apo_bic_szd_model
+        - apo_bi0_9asversion
+        - f_analytics_forecast_figures
+        - d_general_data_store
+    filter_time: 2
+  scope_small_tables:
+    datalake:
+      cds:
+        - d_week
+        - d_day
+        - d_sku
+        - d_sku_h
+        - d_business_unit
+        - f_currency_exchange
+      cds_supply:
+        - sites_attribut_0plant_branches_h
+        - d_sales_data_material_h
+        - d_listing_assortment
+        - d_general_data_warehouse_h
+        - d_general_data_store
+        - d_general_data_customer
+        - d_po_so_link
+        - d_link_purchorg_system
+        - apo_bic_szd_model
+        - apo_bi0_9asversion
+        - apo_sku_mrp_status_h
+      ods_supply:
+        - ecc_zaa_extplan
+  scope_big_tables:
+    datalake:
+      cds:
+        - f_transaction_detail
+        - f_delivery_detail
+        - f_stock_picture
+  scope_big_tables_delta:
+    datalake:
+      cds:
+        - f_transaction_detail
+        - f_delivery_detail
+        - f_stock_picture
+    filter_time: 2
+  scope_apo:
+    datalake:
+      cds_supply:
+        - apo_bic_szd_model
+        - apo_bi0_9asversion
+        - f_forecast_model
+    filter_time: 2
+  scope_apo_full:
+    datalake:
+      cds_supply:
+        - apo_bic_szd_model
+        - apo_bi0_9asversion
+        - f_forecast_model
+    filter_time: 56
+  scope_apo_old:
+    datalake:
+      cds_supply:
+        - f_forecast_model
+    filter_time: -16
+
+columns_to_drop:
+  f_delivery_detail:
+    - dyh_delivery_id
+    - dyh_date_event
+    - dyh_date_ready_for_pickup
+    - dyh_date_expected_delivery
+    - dyh_date_actual_delivery
+    - dyh_date_expected_shipment
+    - dyh_date_actual_shipment
+    - dyh_date_invoiced
+    - dyh_date_shipped
+    - dyh_date_delivered
+    - dyh_date_finished
+    - dyh_date_return_received
+    - dyh_date_ready_for_picking
+    - dyh_date_shipping_delay
+    - dyh_date_stock_shortage
+    - dyh_date_replenishment_requested
+    - dyh_date_replenishment_shipped
+    - dyh_date_begin_picking
+    - dyh_date_end_picking
+    - tdt_date_event
+    - tdt_date_order
+    - tdt_date_return_requested
+    - tdt_date_to_returned
+    - the_date_shipped
+    - frm_delivery_type
+    - dyd_purchase_order_number
+    - tdt_order_number
+    - dyh_shipping_type
+    - dyh_invoice_number
+    - dyh_tracking_number
+    - dyh_transport_customer_number
+    - ctm_loyalty_id
+    - rs_technical_date
+    - rs_technical_flow
+  f_transaction_detail:
+    - tdt_date_event
+    - tdt_date_order
+    - tdt_date_to_returned
+    - wks_idr_workstation
+    - wks_number
+    - ctm_loyalty_id
+    - the_num_operator
+    - the_receipt_number
+    - the_invoice_number
+    - the_order_number
+    - tdt_order_number
+    - tdt_serial_number_item_id
+    - tdt_serial_number_item_lookup_code
+    - tdt_serial_number_input_string
+    - tdt_serial_number_sgtin
+    - tdt_serial_number_gtin
+    - tdt_serial_number_rfid
+    - tdt_serial_number_sku
+    - rs_technical_date
+    - rs_technical_flow
+  f_forecast_model:
+    - date_month_year
+    - unit_measure_sid
+    - country_sid
+    - ecommerce_sid
+    - supply_zone_sid
+    - model_combined_sid
+    - average_baseline_histo
+    - baseline_forecast
+    - baseline_histo
+    - baseline_promo_base_histo
+    - baseline_promo
+    - consolidated_forecast
+    - consolidated_histo
+    - corrected_histo_based_shortage_rate
+    - detected_event_name
+    - expost_forecast_average_histo
+    - events
+    - forecast_after_phasein
+    - forecast_release
+    - global_sales_volumes
+    - initialized_forecast
+    - initialized_histo
+    - monday_global_demand
+    - overridden_histo
+    - turnover_ref
+    - loaded_turnover_ref
+    - overridden_turnover_ref
+    - operational_seasonality_factory
+    - overriden_operational_seasonality_factor
+    - overriden_forecast
+    - overriden_opco
+    - phasein
+    - additional_sales_opco
+    - curve_1_ref
+    - curve_2_ref
+    - real_histo_promo
+    - season_id
+    - percent_shortage_rate
+    - status_fey_figure
+    - stat_forecast_average_histo
+    - percent_stat_forecast_correction
+    - total_opco
+    - transfo_rate
+    - percent_unique_event
+    - qtt_unique_event
+    - curve_3_ref
+    - final_curve_ref
+    - percent_stat_forecast_correction_average
+    - percent_unique_event_average
+    - purch_forecast
+    - global_demand_ope
+    - overriden_forecast_ope
+    - purch_forecast_other_client_zone
+    - rs_technical_date
+    - rs_technical_flow

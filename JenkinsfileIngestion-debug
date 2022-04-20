@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+    parameters {
+        choice(description: '', name: 'PROCESS',
+            choices:'full\nsynchro\ningestion\nrefining\ndeploy_metastore'
+        )
+        choice(description: '', name: 'scope',
+            choices:'scope_test_assortment\nscope_sunday_pipeline_1_transactions\nscope_sunday_pipeline_2_others\nscope_sunday_pipeline_full_1_transactions\nscope_sunday_pipeline_full_2_delivery\nscope_sunday_pipeline_full_3_small_data\nscope_stocks\nscope_one_shot\nscope_fnr_pipeline_delta\nscope_fnr_pipeline_full\nscope_fnr_delta\nscope_fnr_full\nscope_full\nscope_delta\nscope_small_tables\nscope_big_tables\nscope_big_tables_delta\nscope_apo\nscope_apo_full\nscope_apo_old'
+        )
+        choice(description: '', name: 'run_env',
+            choices:'dev\nprod'
+        )
+        string(description: 'branch name', name: 'branch_name', defaultValue:'master')
+    }
+
+    stages {
+        stage('data synchronisation') {
+            when {
+                expression { params.PROCESS == 'full' || params.PROCESS == 'synchro' }
+            }
+            steps {
+                 sh('''
+                     export https_proxy="${https_proxy}"
+                     python3 ./scripts/aws_sync_data.py --scope ${scope} --conf ./conf/functional.yml --techconf ./conf/${run_env}.yml
+                 ''')
+            }
+        }
+
+        stage('Deploy metastore') {
+            when {
+                expression { params.PROCESS == 'deploy_metastore' }
+            }
+            steps {
+                wrap([$class: 'BuildUser']) {
+                    sh('''
+                      export https_proxy="${https_proxy}"
+                      export master_ip="${master_ip}"
+                      echo 'Master IP => ${master_ip}'
+                      scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /var/lib/jenkins/.ssh/${key_pem} /var/lib/jenkins/workspace/${JOB_NAME}/metastore hadoop@${master_ip}:/home/hadoop/
+                      ssh hadoop@${master_ip} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /var/lib/jenkins/.ssh/${key_pem} '(for file in /home/hadoop/metastore/*sql; do spark-sql -d env='${run_env}' -f ${file} || exit; done ); echo $? > /home/hadoop/metastore_code_status'
+                      x=$(ssh hadoop@${master_ip} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /var/lib/jenkins/.ssh/${key_pem} "cat /home/hadoop/metastore_code_status")
+                      exit $x
+                    ''')
+                }
+            }
+        }
+
+        stage('spark app deployment and execution') {
+            when {
+                expression { params.PROCESS == 'full' || params.PROCESS == 'ingestion' || params.PROCESS == 'refining' }
+            }
+            steps {
+                wrap([$class: 'BuildUser']) {
+                    sh('''
+                      export https_proxy="${https_proxy}"
+                      export master_ip="${master_ip}"
+                      echo 'Master IP => ${master_ip}'
+                      scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /var/lib/jenkins/.ssh/${key_pem} /var/lib/jenkins/workspace/${JOB_NAME}/metastore hadoop@${master_ip}:/home/hadoop/
+                      ssh hadoop@${master_ip} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /var/lib/jenkins/.ssh/${key_pem} "sudo chmod 755 /home/hadoop/${JOB_NAME}/main_spark.sh; export PYSPARK_PYTHON='/usr/bin/python3'; cd /home/hadoop/${JOB_NAME}; ./main_spark.sh ${run_env} ${scope} ${PROCESS}"
+                      x=$(ssh hadoop@${master_ip} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /var/lib/jenkins/.ssh/${key_pem} "cat /home/hadoop/${JOB_NAME}/code_status")
+                      exit $x
+                    ''')
+                }
+            }
+        }
+    }
+
+}

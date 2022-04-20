@@ -1,0 +1,186 @@
+env:
+  bucket_raw: fcst-workspace/forecast-cn/fcst-raw
+  bucket_datalake_cds: decathlon-cds
+  bucket_datalake_ods: decathlon-ods
+  bucket_clean: fcst-workspace/forecast-cn/fcst-clean-dev
+  s3_root_path: s3a://
+  aws_sync_filter_time: 2
+
+spark_conf:
+  spark.app.name: dev_data_collection_level0
+  spark.sql.shuffle.partitions: 108
+  spark.default.parallelism: 108
+  spark.autoBroadcastJoinThreshold: 15485760
+  spark.dynamicAllocation.enabled: false
+  spark.executor.memory: 15g
+  spark.executor.instances: 27
+  spark.memory.storageFraction: 0.1
+  spark.memory.fraction: 0.9
+  spark.executor.memoryOverhead: 2g
+  spark.executor.cores: 2
+  spark.yarn.am.memory: 15g
+  spark.yarn.am.cores: 2
+  spark.yarn.am.memoryOverhead: 2g
+  spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version: 2
+  hive.exec.dynamic.partition.mode: nonstrict
+
+data_src:
+  apo_bi0_9asversion:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'apo_bi0_9asversion'
+      nb_partitions: 1
+  apo_bic_szd_model:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'apo_bic_szd_model'
+      nb_partitions: 1
+  d_business_unit:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_business_unit'
+      nb_partitions: 2
+  d_country:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_country'
+      nb_partitions: 1
+  d_day:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_day'
+      nb_partitions: 1
+  d_department:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_department'
+      nb_partitions: 1
+  d_general_data_customer:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_general_data_customer'
+      nb_partitions: 1
+  d_general_data_warehouse_h:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_general_data_warehouse_h'
+  d_label_translation:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_label_translation'
+  d_sales_data_material_h:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_sales_data_material_h'
+  d_sku_h:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_sku_h'
+  d_sku:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_sku'
+      nb_partitions: 10
+  dsy_weather:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'dsy_weather'
+      nb_partitions: 2
+  d_week:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_week'
+      nb_partitions: 1
+  d_general_data_store:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_general_data_store'
+  f_analytics_forecast_figures:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'f_analytics_forecast_figures'
+  f_currency_exchange:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'f_currency_exchange'
+      nb_partitions: 1
+  f_delivery_detail:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'f_delivery_detail'
+      partition: 'month'
+      nb_partitions: 16
+  f_forecast_model:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'f_forecast_model'
+      partition: 'partition_date'
+  apo_sku_mrp_status_h:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'apo_sku_mrp_status_h'
+  ecc_zaa_extplan:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'ecc_zaa_extplan'
+  d_po_so_link:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_po_so_link'
+  d_link_purchorg_system:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_link_purchorg_system'
+  f_stock_picture:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'f_stock_picture'
+      partition: 'month'
+  physical_stock_snapshot:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'physical_stock_snapshot'
+      partition: 'month'
+  f_range_choice:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'f_range_choice'
+  d_model_data_selection:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_model_data_selection'
+      nb_partitions: 1
+  d_listing_assortment:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_listing_assortment'
+  d_comm_season:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_comm_season'
+      nb_partitions: 1
+  d_selection:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'd_selection'
+      nb_partitions: 1
+  f_transaction_detail:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'f_transaction_detail'
+      partition: 'month'
+  mst_d_tiers:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'mst_d_tiers'
+      nb_partitions: 1
+  sales_data_material:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'sales_data_material'
+      nb_partitions: 10
+  sites_attribut_0plant_branches_h:
+    output:
+      database: 'fcst_clean_dev'
+      table: 'sites_attribut_0plant_branches_h'
+      nb_partitions: 1
